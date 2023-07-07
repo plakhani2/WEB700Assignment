@@ -1,5 +1,4 @@
-const { log } = require('console');
-const fs = require('fs');
+import fs from "fs";
 
 class Data {
   constructor(students, courses) {
@@ -12,86 +11,93 @@ let dataCollection = null;
 
 function initialize() {
   return new Promise((resolve, reject) => {
-    fs.readFile('./data/students.json', 'utf8', (err, studentDataFromFile) => {
-      if (err) {
-        reject("Unable to read students.json");
-        return;
-      }
+    var courseDataFromFile, studentsDataFromFile;
 
-      fs.readFile('./data/courses.json', 'utf8', (err, courseDataFromFile) => {
-        if (err) {
-          reject("Unable to read courses.json");
-          return;
-        }
+    courseDataFromFile = fs.readFileSync("./data/courses.json", "utf8");
+    courseDataFromFile = JSON.parse(courseDataFromFile);
 
-        const studentData = JSON.parse(studentDataFromFile);
-        const courseData = JSON.parse(courseDataFromFile);
+    studentsDataFromFile = fs.readFileSync("./data/students.json", "utf8");
+    studentsDataFromFile = JSON.parse(studentsDataFromFile);
 
-        dataCollection = new Data(studentData, courseData);
-        resolve();
-      });
-    });
+    dataCollection = new Data(studentsDataFromFile, courseDataFromFile);
+    if (dataCollection) {
+      resolve(dataCollection);
+    } else {
+      reject("Unable to read!");
+    }
   });
 }
 
-function getAllStudents() {
+export function getStudentsData() {
   return new Promise((resolve, reject) => {
-    if (dataCollection && dataCollection.students.length > 0) {
-      resolve(dataCollection.students);
+    var studentsDataFromFile = dataCollection.students;
+
+    if (studentsDataFromFile.length != 0) {
+      resolve(studentsDataFromFile);
     } else {
-      reject("No results returned");
+      reject("no results returned");
     }
   });
 }
 
-function getTAs() {
+export function getCoursesData() {
   return new Promise((resolve, reject) => {
-    if (dataCollection && dataCollection.students.length > 0) {
-      const tas = dataCollection.students.filter(student => student.TA);
-      resolve(tas);
+    var courseDataFromFile = dataCollection.courses;
+
+    if (courseDataFromFile.length != 0) {
+      resolve(courseDataFromFile);
     } else {
-      reject("No results returned");
+      reject("no results returned");
     }
   });
 }
 
-function getCourses() {
+export function getTAs() {
   return new Promise((resolve, reject) => {
-    if (dataCollection && dataCollection.courses.length > 0) {
-      resolve(dataCollection.courses);
+    var studentsDataFromFile = dataCollection.students;
+    var studentsWithTAs = studentsDataFromFile.filter(
+      (student) => student.TA == true
+    );
+
+    if (studentsWithTAs.length != 0) {
+      resolve(studentsWithTAs);
     } else {
-      reject("No results returned");
+      reject("no results returned");
     }
   });
 }
 
-function getStudentsByCourse(course) {
-  return new Promise(async(resolve, reject) => {
-    const students = await this.getAllStudents();
-    console.log(students)
-    const studentsData = students.filter(student => student.course == course);
-    console.log(studentsData)
-    if (studentsData.length > 0) {
-        resolve(studentsData);
+export function getStudentsByCourse(course) {
+  return new Promise((resolve, reject) => {
+    var studentsDataFromFile = dataCollection.students;
+    var studentsWithGivenCourse = studentsDataFromFile.filter(
+      (student) => student.course == course
+    );
+
+    if (studentsWithGivenCourse.length != 0) {
+      resolve(studentsWithGivenCourse);
     } else {
-        reject('No results returned');
+      reject("no results returned");
     }
   });
 }
 
-function getStudentByNum(num) {
-  return new Promise(async (resolve, reject) => {
-    const students = await this.getAllStudents();
-    console.log(students)
-    const student = students.find(student => student.studentNum == num);
-    if (student) {
-        resolve(student);
+export function getStudentByNum(num) {
+  return new Promise((resolve, reject) => {
+    var studentsDataFromFile = dataCollection.students;
+    var studentsWithGivenNum = studentsDataFromFile.filter(
+      (student) => student.studentNum == num
+    );
+
+    if (studentsWithGivenNum.length != 0) {
+      resolve(studentsWithGivenNum);
     } else {
-        reject('No results returned');
+      reject("no results returned");
     }
   });
 }
-function addStudent(studentData) {
+
+export function addStudent(studentData) {
   return new Promise((resolve, reject) => {
     var studentsDataFromFile = dataCollection.students;
     let newStudent;
@@ -117,12 +123,5 @@ function addStudent(studentData) {
     }
   });
 }
-module.exports = {
-  initialize,
-  getAllStudents,
-  getTAs,
-  getCourses,
-  getStudentsByCourse,
-  getStudentByNum,
-  addStudent
-};
+
+export default initialize;
