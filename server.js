@@ -7,6 +7,18 @@
 *  Name: PRAKASH LAKHANI Student ID: 117302224 Date: 07/07/2023
 *
 ********************************************************************************/ 
+import bodyParser from "body-parser";
+import express from "express";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+import initialize, {
+  getStudentsData,
+  getCoursesData,
+  getTAs,
+  getStudentsByCourse,
+  getStudentByNum,
+  addStudent,
+} from "./modules/collegeData.js";
 
 var HTTP_PORT = process.env.PORT || 8080;
 var express = require("express");
