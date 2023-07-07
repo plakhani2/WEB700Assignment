@@ -96,6 +96,15 @@ myApp.get('/tas', (req, res) => {
     });
 });
 
+myAppapp.post("/studentss/add", (req, res) => {
+  addStudent(req.body)
+    .then((value) => {
+      res.send(value);
+    })
+    .catch((err) => {
+      res.send({ message: "no results" });
+    });
+});
 
 
 myApp.get('/', (req, res) => {
