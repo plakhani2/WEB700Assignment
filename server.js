@@ -113,7 +113,7 @@ myApp.get('/htmlDemo', (req, res) => {
   res.sendFile(__dirname + '/views/htmlDemo.html');
 });
 
-myApp.post("/studentss/add", (req, res) => {
+myApp.post("/students/add", (req, res) => {
   addStudent(req.body)
     .then((value) => {
       res.send(value);
