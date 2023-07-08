@@ -7,26 +7,19 @@
 *  Name: PRAKASH LAKHANI Student ID: 117302224 Date: 07/07/2023
 *
 ********************************************************************************/ 
-import bodyParser from "body-parser";
-import express from "express";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
-import initialize, {
-  getStudentsData,
-  getCoursesData,
-  getTAs,
-  getStudentsByCourse,
-  getStudentByNum,
-  addStudent,
-} from "./modules/collegeData.js";
 
-var HTTP_PORT = process.env.PORT || 8080;
+var HTTP_PORT = process.env.PORT || 8089;
 var express = require("express");
 var myApp = express();
 var path = require("path");
 const collegeData = require('./modules/collegeData'); 
 const { log } = require("console");
 
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = dirname(__filename);
+
+//myApp.use(express.static("public"));
+//myApp.use(bodyParser.urlencoded({ extended: true }));
 
 myApp.get('/students', (req, res) => {
   const { course } = req.query;
@@ -131,11 +124,16 @@ myApp.get("/students/add", (req, res) => {
 myApp.post("/students/add", (req, res) => {
   addStudent(req.body)
     .then((value) => {
-      res.send(value);
+      res.json(value);
     })
     .catch((err) => {
       res.send({ message: "no results" });
     });
+});
+
+
+myApp.use((req, res) => {
+  res.status(404).send('Page Not Found');
 });
 
 collegeData.initialize()
@@ -150,6 +148,3 @@ collegeData.initialize()
   });
 
 
-myApp.use((req, res) => {
-  res.status(404).send('Page Not Found');
-});
