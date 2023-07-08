@@ -123,9 +123,9 @@ myApp.get("/students/add", (req, res) => {
 });
 
 myApp.post("/students/add", (req, res) => {
-  addStudent(req.body)
+  collegeData.addStudent(req.body)
     .then((value) => {
-      res.json(value);
+      res.send(value);
     })
     .catch((err) => {
       res.send({ message: "no results - 1" });
