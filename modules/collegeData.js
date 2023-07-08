@@ -91,19 +91,19 @@ function getStudentByNum(num) {
     }
   });
 }
-function addStudent(studentData) {
+function addStudent(studentData1) {
   return new Promise((resolve, reject) => {
     var studentsDataFromFile = dataCollection.students;
     let newStudent;
-    if (studentData.TA) {
+    if (studentData1.TA) {
       newStudent = {
-        ...studentData,
+        ...studentData1,
         TA: true,
         studentNum: studentsDataFromFile.length + 1,
       };
     } else {
       newStudent = {
-        ...studentData,
+        ...studentData1,
         TA: false,
         studentNum: studentsDataFromFile.length + 1,
       };

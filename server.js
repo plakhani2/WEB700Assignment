@@ -8,7 +8,7 @@
 *
 ********************************************************************************/ 
 
-var HTTP_PORT = process.env.PORT || 8089;
+var HTTP_PORT = process.env.PORT || 8881;
 var express = require("express");
 var myApp = express();
 var path = require("path");
@@ -121,26 +121,27 @@ myApp.get('/htmlDemo', (req, res) => {
 myApp.get("/students/add", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/addStudent.html"));
 });
+
 myApp.post("/students/add", (req, res) => {
   addStudent(req.body)
     .then((value) => {
       res.json(value);
     })
     .catch((err) => {
-      res.send({ message: "no results" });
+      res.send({ message: "no results - 1" });
     });
 });
 
 
 myApp.use((req, res) => {
-  res.status(404).send('Page Not Found');
+  res.status(404).send('Page Not Found - 1');
 });
 
 collegeData.initialize()
   .then(() => {
     
-    myApp.listen(8080, () => {
-      console.log('Server is running on port 8080');
+    myApp.listen(HTTP_PORT, () => {
+      console.log('Server is running on port', HTTP_PORT);
     });
   })
   .catch((err) => {
